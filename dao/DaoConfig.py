@@ -12,31 +12,26 @@ sys.path.append(os.path.abspath(os.curdir))
 
 import pymysql
 
-# 对连接应该使用单例模式
-def Singleton(cls):
-    """单例模式"""
-    instance = {}
-    def _singleton(*args, **kws):
-        if cls not in instance:
-            instance[cls] = cls(*args, **kws)
-        return instance[cls]
-    return _singleton
+from config.configuration import pconfig
+from utils.mode import Singleton
 
+# 数据库的连接类，行为是单例模式
 @Singleton
 class Connection:
-    """单连接类"""
     def __init__(self):
         super().__init__()
         self.conn = None
 
     def getConn(self):
         if self.conn is None:
+            cons = pconfig()
+            dbcon = cons.get_config()["database-config"]
             self.conn = pymysql.connect(
-                host = 'localhost', 
-                user='root',
-                password='taylor01', 
-                db='nhknews', 
-                charset='utf8'
+                host = dbcon["host"],
+                user= dbcon["username"],
+                password= dbcon["password"], 
+                db=dbcon["dbname"], 
+                charset=dbcon["charset"]
                 )
         return self.conn
 

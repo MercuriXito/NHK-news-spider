@@ -3,6 +3,7 @@
         "dbname":"nhknews",
         "username":"root",
         "password":"taylor01",
-        "host":"127.0.0.1:3306",
+        "host":"localhost",
+        "charset":"utf8"
     }
 }
