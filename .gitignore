@@ -1,3 +1,9 @@
 .vscode/*
 records/*
 */__pycache__/*
+static/downloaded/*
+static/*.html
+templates/*
+!templates/*.html
+__pycache__/*
+testUnit.py
