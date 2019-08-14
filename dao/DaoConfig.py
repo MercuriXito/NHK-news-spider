@@ -11,9 +11,10 @@ import os,sys
 sys.path.append(os.path.abspath(os.curdir))
 
 import pymysql
+import threading
 
 from config.configuration import pconfig
-from utils.mode import Singleton
+from utils.annotations import Singleton
 
 # 数据库的连接类，行为是单例模式
 @Singleton

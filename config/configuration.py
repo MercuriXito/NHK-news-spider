@@ -10,7 +10,7 @@
 import json
 import os
 
-from utils.mode import Singleton
+from utils.annotations import Singleton
 
 # 项目全局配置类，行为是单例模式
 @Singleton
