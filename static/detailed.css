@@ -1,0 +1,62 @@
+/* 详情页正文栏目 */
+div.detailed{
+    width:100%; height: 86%;background-color: white;
+    overflow: auto; scroll-behavior: smooth;
+}
+div.detailed::-webkit-scrollbar{display: none;}
+div.detailed{-ms-overflow-style: none;  overflow: -moz-scrollbars-none;}
+
+/* 栏目内的模块 */
+div.detailed > div.detailed-imgs{width: 100%; height: 30%; min-height: 200px; background-color: grey;
+position: relative;}
+div.detailed > div.detailed-content{width: 100%; font-family: 'MS Mincho', SimSun, 'Times New Roman';}
+div.detailed > div.detailed-content > div.dcontent-title{
+    width:100%;  margin: 15px 0 15px 0;
+    text-align: left; font-size: 1.2em; font-weight: bold; line-height: 1.2em;
+}
+
+div.detailed > div.detailed-imgs > img {width: 100%; height: 100%;}
+
+/* 主要内容 */
+div.detailed > div.detailed-content > div.dcontent-main{
+    line-height: 2em;}
+div.detailed > div.detailed-content > div.dcontent-main p{
+    margin-top: 0; margin-bottom: 0; text-indent: 2em;}
+div.detailed > div.detailed-content > div.dcontent-dict{}
+div.detailed > div.detailed-content > div.dcontent-dict > span.name{font-weight: bold; font-size: 1.1em;}
+
+/* 单个字典样式 */
+div.dict-block p{text-indent: 2em; line-height: 2em; margin: 0;}
+div.dict-block p > span.words{font-weight:bold;}
+div.dict-block p > span.delimeter{font-weight: bold;}
+
+/* 分割线样式 */
+hr.imgs-content{}
+hr.main-dictionary{}
+
+/* 注释用 */
+/* 注释用ruby和rt比较好 */
+span.punc-annotation{position: relative;}
+span.punc-annotation > span.words{}
+span.punc-annotation > span.anno{
+    position: absolute; left:-1em; top:-2em; overflow: hidden;
+    font-size: 0.5em; text-indent: 0;
+}
+
+/* icons-list 图标排列样式 */
+div.icons-list{ position: absolute; bottom: 7%; right: 15px;
+width: 15%; height: 200px; }
+div.icons-list ul{text-decoration: none; list-style: none;padding: 0; margin: 0;}
+div.icons-list ul > li {margin: 25px auto;}
+div.icons-list ul > li > div.icon-wrapper{
+    position:relative; width: 50%; margin: 0 auto;
+    border-radius: 50%;}
+div.icons-list ul > li > div.icon-wrapper > div.icon-img{
+    height:0; width: 0; padding-bottom: 100%; position: relative; width: 100%;}
+div.icons-list ul > li > div.icon-wrapper > div.icon-img > img{
+    position: absolute; top:0; left: 0; height: 100%; width: 100%;
+    opacity: 0.5;
+}
+div.icons-list ul > li > div.icon-wrapper > div.icon-img > img:hover{
+    cursor: pointer;
+}

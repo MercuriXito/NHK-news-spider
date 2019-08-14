@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>NHK News Title</title>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static',filename='index.css') }}"/>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static',filename='detailed.css') }}"/>
+    <!-- <script src="https://ajax.aspnetcdn.com/ajax/jquery/jquery-1.9.0.min.js"></script>
+     -->
+    <script src="{{ url_for('static',filename='js/jquery-3.4.1.min.js') }}"></script>
+    <script>
+        // jquery
+        $(document).ready(function(){
+            // 移动设备访问调整margin
+            if(navigator.userAgent.match(/(iPhone|iPod|Android|ios)/i)){
+                $("div.wrapper").css("margin","0");
+            }
+
+            // icons 绑定事件 
+            $("img[name='return']").click(function(){
+                window.location="/";
+            });
+
+            $("img[name='display']").click(function(){
+                $("ruby > rt").toggle();
+            });
+
+            // 请求详情页数据：
+            /*
+                图片：
+                标题：
+                详情内容：
+                单词：
+                    每个单词包含：
+                        单词：释义。
+            
+            */
+
+            var present_path = window.location.pathname.split("/")
+            var news_id = present_path[present_path.length - 1]
+            var json_path = "/easynews/show/detailedcontent/"
+            $.ajax({
+                url: json_path + news_id,
+                type: "GET",
+                dataType: "json",
+                success: function(data){
+
+                    if(data == {}){
+                        window.location.href = "/error/404"
+                    }
+
+                    var foo = $("div.detailed");
+
+                    console.log(data);
+                    console.log(data["img_url"]);
+
+                    // 渲染图片
+                    var $imgblock = $("<div class='detailed-imgs><img src='" + data["img_url"] + "'/></div>");
+                    foo.append($imgblock);
+                    
+                    // 渲染主要内容
+                    var $contentblock = $("<div class='detailed-content'></div>");
+                    var $cblock_title = $("<div class='dcontent-title'>" + data["news_title"] + "</div><hr class='imgs-content'/>");
+                    $contentblock.append($cblock_title);
+
+                    var $cblock_content = $("<div class='dcontent-main'></div>");
+                    var paragraphs = data["news_content"].split("\n");
+                    $.each(paragraphs, function(){
+                        var $cblock_para = $("<p>" + this + "</p>")
+                        $cblock_content.append($cblock_para);
+                    });
+                    $contentblock.append($cblock_content);
+
+                    $contentblock.append($("<hr class='main-directory'>"))
+                    
+                    // 渲染最后的单词
+                    var $cblock_dict = $("<div class='dcontent-dict'></div>");
+                    $cblock_dict.append($("<span class='name'>「辞書」</span>"));
+                    $cblock_dict_dd = $("<div class='dict-block'></div>");
+                    $.each(data["news_link_dangos"], function(){
+                        var $this_dict = $("<p>"+
+                            "<span class='words'>" + this["dango"] + "</span>"+
+                            "<span class='delimeter'>:</span>" +
+                            this["dango_mean"] +
+                            "</p>");
+                        $cblock_dict_dd.append($this_dict);
+                    });
+                    $cblock_dict.append($cblock_dict_dd);
+
+                    $contentblock.append($cblock_dict);
+
+                    foo.append($contentblock);
+                }
+            });
+
+        });
+    </script>
+</head>
+<body>
+    <div class="wrapper">
+        <div class="interface">
+            <div class="header">
+                <span > NHK news </span>
+            </div>
+            <div class="detailed">
+                
+            </div>
+    
+            <!-- icon图标排列 -->
+            <div class="icons-list">
+                <ul>
+                    <li class="icon">
+                        <div class="icon-wrapper">
+                            <div class="icon-img">
+                                <img name="return" src="{{ url_for('static',filename='icons/return.png') }}" alt="" />
+                            </div>
+                        </div>
+                    </li>
+                    <li class="icon">
+                        <div class="icon-wrapper">
+                            <div class="icon-img">
+                                <img name="display" src="{{ url_for('static',filename='icons/display.png') }}" alt="" />
+                            </div>
+                        </div>
+                    </li>
+                    <li class="icon">
+                        <div class="icon-wrapper">
+                            <div class="icon-img">
+                                <img src="{{ url_for('static',filename='icons/audio.png') }}" alt="" />
+                            </div>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+    
+            <div class="userbar"> 
+                    <ul>
+                        <li>
+                            <div class="icon-block">
+                                <div class="icon-wrapper">
+                                    <img src="{{ url_for('static',filename='icons/reader.png') }}" alt="">
+                                </div>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="icon-block">
+                                <div class="icon-wrapper">
+                                    <img src="{{ url_for('static',filename='icons/user.png') }}" alt="">
+                                </div>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+        </div>
+    </div>
+
+    
+</body>
+</html>

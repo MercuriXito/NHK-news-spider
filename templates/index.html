@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="stylesheet" href="{{ url_for('static',filename='index.css') }}" type="text/css"/>
+    <script src="http://ajax.aspnetcdn.com/ajax/jQuery/jquery-1.8.0.js"></script>
+    <title>display</title>
+    <script>
+        jQuery.support.cors = true;
+        $(document).ready(function(){
+            
+            /*
+            // 调整图片的高度
+            var img_height = $("div.block-briefnews").height();
+            console.log(img_height);
+            var brief_imgs = $("div.img-wrapper img");
+            for(var i = 0; i < brief_imgs.length; i ++){
+                brief_imgs[i].height = img_height.toString()+"px";
+                brief_imgs[i].width = img_height.toString()+"px";
+            }
+            */
+
+            // 移动设备访问调整margin
+            if(navigator.userAgent.match(/(iPhone|iPod|Android|ios)/i)){
+                $("div.wrapper").css("margin","0");
+            }
+
+            // ajax请求后台的数据
+            $.ajax({   
+                url: "/easynews/show/index",
+                type:"GET",
+                dataType: "json",
+                success:function(data){
+                    $.each(data, function(){
+
+                        var foo = $("div.content");
+
+                        var $block = $("<div class='block-briefnews'></div>");
+                        
+                        // block中的img
+                        var $img = $("<div class='img-wrapper'>" + "    <div class='images'>" + 
+                            "<a class='news-detailed' href='detailed/" + this.detailed_url + " '><img src='" + this.img_url + "'/></a>" + 
+                            "</div>" + "</div>");
+                        $block.append($img);
+
+                        // 组成block中的内容页
+                        var $content = $("<div class='content-wrapper'></div>");
+                        var $title = $("<div class='title'><a class='news-detailed' href='detailed/" + 
+                            this.news_id + "'><p>" 
+                            + this.news_title + "</p></a></div>");
+                        var $time = $("<div class='time'>" + this.publish_date + "</div>");
+                        $content.append($title);
+                        $content.append($time);
+
+                        $block.append($content);
+
+                        foo.append($block);
+
+                    });
+                }
+            })
+
+        })
+
+        /*
+        在基本的页面加载完毕之后发送ajax请求，
+        然后JQuery继续渲染
+        怎么渲染？： 
+            (1) 遍历json批量添加字符串的方式。
+        */
+
+        /*
+        需要的数据：
+            (1) 图片：图片的加载路径
+            (2) 图片标题
+            (3) 新闻的news_id，放在链接中使用
+            (4) 新闻的日期：时间的格式是"%Y-%m-%d"
+        */
+
+    </script>
+</head>
+<body>
+    <div class="wrapper">
+        <div class="interface">
+            <div class="header">
+                <div class="logo"> NHK news </div>
+                <div class="switch-lists"></div>
+            </div>
+            <div class="topbar">
+                <ul class="bar-time-selector">
+                    <li><a href="#" class="checked">Recent</a></li>
+                    <li><a href="#">Earlier</a></li>
+                    <li><a href="#">Old</a></li>
+                </ul>
+
+            </div>
+            <div class="content">
+            </div>
+            <!-- 底栏切换 -->
+            <div class="userbar"> 
+                <ul>
+                    <li>
+                        <div class="icon-block">
+                            <div class="icon-wrapper">
+                                <img src="{{ url_for('static',filename='icons/reader.png') }}" alt="">
+                            </div>
+                        </div>
+                    </li>
+                    <li>
+                        <div class="icon-block">
+                            <div class="icon-wrapper">
+                                <img src="{{ url_for('static',filename='icons/user.png') }}" alt="">
+                            </div>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+
+        </div>
+    </div>
+    
+</body>
+</html>
