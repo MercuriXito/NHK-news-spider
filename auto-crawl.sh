@@ -1,4 +1,4 @@
-!/usr/bin/bash
+#!/usr/bin/bash
 
 # env variables
 localtime=`date +%Y-%m-%d`

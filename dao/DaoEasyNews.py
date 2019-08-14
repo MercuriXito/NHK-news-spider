@@ -12,11 +12,13 @@ import pymysql
 from datetime import datetime
 import time
 
+from utils.annotations import threadLock
 from dao.DaoConfig import getConn
 from entity.EasyNews import EasyNews
 
 conn = getConn()
 
+@threadLock
 def insert(easyNews):
 
     try:

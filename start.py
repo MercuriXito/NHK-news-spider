@@ -7,8 +7,12 @@
 
 '''
 
-from spider import route
+from spider import route2
 from dao import DaoConfig
 
-route.scrapeMain()
-DaoConfig.closeConn()
+try:
+    route2.scrapeMain()
+except Exception as ex:
+    raise(ex)
+finally:
+    DaoConfig.closeConn()

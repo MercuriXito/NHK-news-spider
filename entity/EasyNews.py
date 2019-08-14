@@ -4,7 +4,7 @@
     @Author: Victor Chen
     @File  :  EasyNews.py
     @Description:
-
+        EasyNews 实体类
 '''
 
 import datetime
