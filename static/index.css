@@ -1,35 +1,11 @@
-﻿/* layout */
-html, body{ margin: 0; padding:0; height: 100%; width: 100%;}/* 要html和body都要100%才能充满 */
-.wrapper{height: 100%; margin: 0 37% 0 37%; min-width: 300px;
-background-color: gray;}
-.interface{height: 100%; width: 100%; background-color: rgb(196, 192, 192);position: relative;}
-.header, .topbar, .userbar{width:100%;
-background-color:  rgb(206, 61, 36); 
-color: white; }
-.header, .userbar{height:7%;}
-.topbar{height:6%;}
-.content{width: 100%; height: 80%; position: relative;
-background-color: white;
-overflow: auto; scroll-behavior: smooth; }
-.content::-webkit-scrollbar{ width: 0;} /*Safari and Chrome*/
-.content{-ms-overflow-style: none; overflow: -moz-scrollbars-none;}/*IE and firefox*/
-
-/* elements in headers*/
-div.header > div.logo{height: 100%; width: 40%; margin: 0; float:left;
-    text-align: center; font-family: Impact, 'Times New Roman', sans-serif;
-font-weight: bold; font-size: 1.3em;}
-div.header > div.switch-lists{height: 100%; width: 60%; float: left;}
-
-
-
-/* list selector*/
+﻿/* header下的时间选择器 */
 ul.bar-time-selector{ list-style: none; margin: 0; height: 100%; width: 100%; margin: 0 auto; padding:0; }
 ul.bar-time-selector > li {display: block; float: left; height: 100%; width: 30%; margin: 0 1% 0 1%; padding-top: 1%;
 text-align: center;}
 ul.bar-time-selector > li > a{ text-decoration: none; 
-font-size: 1.2em; font-family: Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif; color:rgba(255, 255, 255, 0.904);}
+font-size: 1.2em; font-family: Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif; color: white;}
 ul.bar-time-selector > li > a:hover{color: white;}
-ul.bar-time-selector > li > a.checked{color: white;}
+ul.bar-time-selector > li > a.checked{color: rgba(126, 119, 119, 0.904);}
 
 
 /* elements in content*/
@@ -51,13 +27,3 @@ div.block-briefnews > div.content-wrapper > div.title{width: 92%; height: 50%; m
 div.block-briefnews > div.content-wrapper > div.time{width: 100%; height: 20%; text-align:right;}
 
 div.block-briefnews a, a:hover, a:focus{text-decoration: none; color:inherit;}
-
-/* 用户底栏 */
-div.userbar ul {text-decoration: none; list-style: none; margin: 0; padding: 0;height: 100%; width: 100%;}
-div.userbar ul > li{float: left; width: 50%; margin: 0;height: 100%;}
-div.userbar ul > li > div.icon-block{height:100%; width: 50%; margin: 0 25% 0 25%;}
-div.userbar ul > li > div.icon-block > div.icon-wrapper{width: 60%; 
-position: relative; padding-bottom: 60%; height: 0; margin: 0 auto;}
-div.userbar ul > li > div.icon-block > div.icon-wrapper > img {
-    width:100%; position: absolute; top: 0; left:0;}
-div.userbar ul > li > div.icon-block > div.icon-wrapper > img:hover{cursor: pointer;}

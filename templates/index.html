@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static',filename='frame.css') }}" />
     <link rel="stylesheet" href="{{ url_for('static',filename='index.css') }}" type="text/css"/>
     <script src="http://ajax.aspnetcdn.com/ajax/jQuery/jquery-1.8.0.js"></script>
     <title>display</title>
@@ -21,6 +22,18 @@
                 brief_imgs[i].width = img_height.toString()+"px";
             }
             */
+
+            // 列表栏切换添加响应事件
+            $("div.topbar a").click(function(){
+                console.log(this.className);
+                //
+                $.each($("div.topbar a"),function(){
+                    this.className = "";
+                });
+                this.className = "checked";
+                // 然后再做ajax
+            });
+            
 
             // 移动设备访问调整margin
             if(navigator.userAgent.match(/(iPhone|iPod|Android|ios)/i)){
@@ -65,13 +78,6 @@
         })
 
         /*
-        在基本的页面加载完毕之后发送ajax请求，
-        然后JQuery继续渲染
-        怎么渲染？： 
-            (1) 遍历json批量添加字符串的方式。
-        */
-
-        /*
         需要的数据：
             (1) 图片：图片的加载路径
             (2) 图片标题
@@ -85,7 +91,7 @@
     <div class="wrapper">
         <div class="interface">
             <div class="header">
-                <div class="logo"> NHK news </div>
+                <span class="logo"> NHK news </span>
                 <div class="switch-lists"></div>
             </div>
             <div class="topbar">

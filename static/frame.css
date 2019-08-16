@@ -1,0 +1,32 @@
+/* layout */
+html, body{ margin: 0; padding:0; height: 100%; width: 100%;}/* 要html和body都要100%才能充满 */
+.wrapper{height: 100%; margin: 0 37% 0 37%; min-width: 300px;
+background-color: gray;}
+.interface{height: 100%; width: 100%; background-color: rgb(196, 192, 192);position: relative;}
+.header, .topbar, .userbar{width:100%;
+background-color:  rgb(206, 61, 36); 
+color: white; }
+.header, .userbar{height:7%;}
+.topbar{height:6%;}
+.content{width: 100%; height: 80%; position: relative;
+background-color: white;
+overflow: auto; scroll-behavior: smooth; }
+.content::-webkit-scrollbar{ width: 0;} /*Safari and Chrome*/
+.content{-ms-overflow-style: none; overflow: -moz-scrollbars-none;}/*IE and firefox*/
+
+/* elements in headers*/
+div.header > span.logo{height: 100%; width: 40%; margin: 0; float:left;
+    text-align: center; font-family: Impact, 'Times New Roman', sans-serif;
+font-weight: bold; font-size: 1.3em;}
+div.header > div.switch-lists{height: 100%; width: 60%; float: left;}
+
+
+/* 用户底栏 */
+div.userbar ul {text-decoration: none; list-style: none; margin: 0; padding: 0;height: 100%; width: 100%;}
+div.userbar ul > li{float: left; width: 50%; margin: 0;height: 100%;}
+div.userbar ul > li > div.icon-block{height:100%; width: 50%; margin: 0 25% 0 25%;}
+div.userbar ul > li > div.icon-block > div.icon-wrapper{width: 50%; 
+position: relative; padding-bottom: 50%; height: 0; margin: 0 auto;}
+div.userbar ul > li > div.icon-block > div.icon-wrapper > img {
+    width:100%; position: absolute; top: 0; left:0;}
+div.userbar ul > li > div.icon-block > div.icon-wrapper > img:hover{cursor: pointer;}

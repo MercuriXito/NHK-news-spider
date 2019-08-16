@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>NHK News Title</title>
-    <link rel="stylesheet" type="text/css" href="{{ url_for('static',filename='index.css') }}"/>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static',filename='frame.css') }}" />
     <link rel="stylesheet" type="text/css" href="{{ url_for('static',filename='detailed.css') }}"/>
     <!-- <script src="https://ajax.aspnetcdn.com/ajax/jquery/jquery-1.9.0.min.js"></script>
      -->
@@ -47,51 +47,35 @@
                 dataType: "json",
                 success: function(data){
 
-                    if(data == {}){
+                    if(data["news_id"] === undefined){
                         window.location.href = "/error/404"
                     }
-
-                    var foo = $("div.detailed");
-
                     console.log(data);
-                    console.log(data["img_url"]);
-
                     // 渲染图片
-                    var $imgblock = $("<div class='detailed-imgs><img src='" + data["img_url"] + "'/></div>");
-                    foo.append($imgblock);
+                    $("div.detailed-imgs > img").attr("src", data["img_url"]);
                     
                     // 渲染主要内容
-                    var $contentblock = $("<div class='detailed-content'></div>");
-                    var $cblock_title = $("<div class='dcontent-title'>" + data["news_title"] + "</div><hr class='imgs-content'/>");
-                    $contentblock.append($cblock_title);
-
-                    var $cblock_content = $("<div class='dcontent-main'></div>");
+                    // title
+                    $("div.detailed-content > div.dcontent-title").html(data["news_title"]);
+                    // content
+                    var cblock_content = $("div.detailed-content > div.dcontent-main");
                     var paragraphs = data["news_content"].split("\n");
                     $.each(paragraphs, function(){
                         var $cblock_para = $("<p>" + this + "</p>")
-                        $cblock_content.append($cblock_para);
+                        cblock_content.append($cblock_para);
                     });
-                    $contentblock.append($cblock_content);
 
-                    $contentblock.append($("<hr class='main-directory'>"))
-                    
                     // 渲染最后的单词
-                    var $cblock_dict = $("<div class='dcontent-dict'></div>");
-                    $cblock_dict.append($("<span class='name'>「辞書」</span>"));
-                    $cblock_dict_dd = $("<div class='dict-block'></div>");
+                    var cblock_dict_dd = $("div.detailed-content > div.dcontent-dict > div.dict-block");
                     $.each(data["news_link_dangos"], function(){
                         var $this_dict = $("<p>"+
                             "<span class='words'>" + this["dango"] + "</span>"+
                             "<span class='delimeter'>:</span>" +
                             this["dango_mean"] +
                             "</p>");
-                        $cblock_dict_dd.append($this_dict);
+                        cblock_dict_dd.append($this_dict);
                     });
-                    $cblock_dict.append($cblock_dict_dd);
 
-                    $contentblock.append($cblock_dict);
-
-                    foo.append($contentblock);
                 }
             });
 
@@ -102,10 +86,30 @@
     <div class="wrapper">
         <div class="interface">
             <div class="header">
-                <span > NHK news </span>
+                <span class="logo"> NHK news </span>
+                <div class="switch-lists"></div>
             </div>
             <div class="detailed">
-                
+                    <div class="detailed-imgs">
+                        <img src="img/sakura.png"/>
+                    </div>
+                    <div class="detailed-content">
+                        <div class="dcontent-title">
+                            <!-- 标题 -->
+                            ここはニュースのタイトルを書いてください．
+                        </div>
+                        <hr class="imgs-content" />
+                        <div class="dcontent-main">
+                        <!-- 正文 -->
+                        </div>
+                        <hr class="main-dictionary"/>
+                        <div class="dcontent-dict">
+                            <span class="name">「辞書」</span>
+                            <div class="dict-block">
+                                <!-- 单词和释义 -->
+                            </div>
+                        </div>
+                    </div>
             </div>
     
             <!-- icon图标排列 -->
@@ -155,7 +159,5 @@
                 </div>
         </div>
     </div>
-
-    
 </body>
 </html>
