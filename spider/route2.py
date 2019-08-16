@@ -77,11 +77,17 @@ def inforParser(response, entity):
 
     str_content = ""
     for paragraph in paragraphs:
-        # 每个段落去掉其中的汉字假名注释的rt标签
-        notations = paragraph.find_all("rt")
-        for notation in notations:
-            notation.clear()
-        str_content += paragraph.getText() + "\n"
+
+        # 去除span标签和a标签，保留原有文字的ruby注音
+        while paragraph.a != None:
+            paragraph.a.unwrap()
+
+        while paragraph.span != None:
+            paragraph.span.unwrap()
+
+        # 转化为字符串
+        content_with_ruby = ''.join([str(p) for p in paragraph.contents])
+        str_content += content_with_ruby + "\n"
         pass
 
     entity.content = str_content
