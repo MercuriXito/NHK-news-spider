@@ -18,17 +18,32 @@ from service.EasyNewsRenderService import *
 app = Flask(__name__)
 
 @app.route("/easynews/show/index")
-def render_index_date():
+def render_index():
     print("get requests")
 
     # 返回之前将查询的数据进行修改，做路径拼接
-    rj =  render_index_json()
+    rj =  render_index_time_range_json("recent")
     static_root_path  = "/static"
     img_save_relpath = "/downloaded/easyNews/img"
     for news in rj:
         news["img_url"] = static_root_path + img_save_relpath + "/" + news["news_img_name"] 
 
     return json.dumps(rj)
+
+
+@app.route("/easynews/show/index/<news_time_range>")
+def render_date_range_index(news_time_range):
+    print(news_time_range)
+
+    # 返回之前将查询的数据进行修改，做路径拼接
+    rj =  render_index_time_range_json(news_time_range)
+    static_root_path  = "/static"
+    img_save_relpath = "/downloaded/easyNews/img"
+    for news in rj:
+        news["img_url"] = static_root_path + img_save_relpath + "/" + news["news_img_name"] 
+
+    return json.dumps(rj)
+
 
 @app.route("/easynews/show/detailedcontent/<news_id>")
 def render_detailed_json(news_id):

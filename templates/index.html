@@ -9,29 +9,77 @@
     <script src="http://ajax.aspnetcdn.com/ajax/jQuery/jquery-1.8.0.js"></script>
     <title>display</title>
     <script>
+
+        /*
+        json 中的数据：
+            (1) 图片：图片的加载路径
+            (2) 图片标题
+            (3) 新闻的news_id，放在链接中使用
+            (4) 新闻的日期：时间的格式是"%Y-%m-%d"
+        */
+
+        // 用json对象构建news_block
+        function form_news_block(data){
+            $.each(data, function(){                
+            // 父元素"div.content"
+            var foo = $("div.content");
+
+            var $block = $("<div class='block-briefnews'></div>");
+            // block中的img
+            var $img = $("<div class='img-wrapper'>" + "    <div class='images'>" + 
+                "<a class='news-detailed' href='detailed/" + this.detailed_url + " '><img src='" + this.img_url + "'/></a>" + 
+                "</div>" + "</div>");
+            $block.append($img);
+            // 组成block中的内容页
+            var $content = $("<div class='content-wrapper'></div>");
+            var $title = $("<div class='title'><a class='news-detailed' href='detailed/" + 
+                this.news_id + "'><p>" 
+                + this.news_title + "</p></a></div>");
+            var $time = $("<div class='time'>" + this.publish_date + "</div>");
+            $content.append($title);
+            $content.append($time);
+
+            $block.append($content);
+            foo.append($block);
+             });
+        }
+
         jQuery.support.cors = true;
         $(document).ready(function(){
-            
-            /*
-            // 调整图片的高度
-            var img_height = $("div.block-briefnews").height();
-            console.log(img_height);
-            var brief_imgs = $("div.img-wrapper img");
-            for(var i = 0; i < brief_imgs.length; i ++){
-                brief_imgs[i].height = img_height.toString()+"px";
-                brief_imgs[i].width = img_height.toString()+"px";
-            }
-            */
 
             // 列表栏切换添加响应事件
-            $("div.topbar a").click(function(){
-                console.log(this.className);
+            $("div.topbar a").click(function(event){
+                event.preventDefault();
+                
+                var curTag = this.innerText;
+                var checkedTag;
                 //
                 $.each($("div.topbar a"),function(){
-                    this.className = "";
+                    if (this.className == "checked"){
+                        this.className = "";
+                        checkedTag = this.innerText;
+                    }
                 });
                 this.className = "checked";
-                // 然后再做ajax
+                
+                // 然后再做ajax, 如果是同一个标签不做ajax
+                if (curTag === checkedTag){
+                    console.log("Same checked, so no update");
+                    return;
+                }
+
+                $.ajax({
+                    url: "easynews/show/index/" + this.innerText.toLowerCase(),
+                    type: "GET",
+                    dataType: "json",
+                    success:function(data){
+                        $("div.content").empty();
+                        form_news_block(data);
+                    },
+                    error:function(){
+                        console.log(url);
+                    }
+                });
             });
             
 
@@ -46,44 +94,11 @@
                 type:"GET",
                 dataType: "json",
                 success:function(data){
-                    $.each(data, function(){
-
-                        var foo = $("div.content");
-
-                        var $block = $("<div class='block-briefnews'></div>");
-                        
-                        // block中的img
-                        var $img = $("<div class='img-wrapper'>" + "    <div class='images'>" + 
-                            "<a class='news-detailed' href='detailed/" + this.detailed_url + " '><img src='" + this.img_url + "'/></a>" + 
-                            "</div>" + "</div>");
-                        $block.append($img);
-
-                        // 组成block中的内容页
-                        var $content = $("<div class='content-wrapper'></div>");
-                        var $title = $("<div class='title'><a class='news-detailed' href='detailed/" + 
-                            this.news_id + "'><p>" 
-                            + this.news_title + "</p></a></div>");
-                        var $time = $("<div class='time'>" + this.publish_date + "</div>");
-                        $content.append($title);
-                        $content.append($time);
-
-                        $block.append($content);
-
-                        foo.append($block);
-
-                    });
+                    form_news_block(data);   
                 }
             })
 
         })
-
-        /*
-        需要的数据：
-            (1) 图片：图片的加载路径
-            (2) 图片标题
-            (3) 新闻的news_id，放在链接中使用
-            (4) 新闻的日期：时间的格式是"%Y-%m-%d"
-        */
 
     </script>
 </head>
