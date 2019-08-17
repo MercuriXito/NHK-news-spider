@@ -64,6 +64,10 @@ def form_cond_str(fields, cond_types, vals):
         
         if cond_type == 1:
             condstr += "="
+        elif cond_type == 2:
+            condstr += " < "
+        elif cond_type == 3:
+            condstr += " > "
         else:
             condstr += " LIKE "
 
@@ -84,7 +88,7 @@ def form_cond_str(fields, cond_types, vals):
 def query_by_condition_func(tbname):
     def _query_by_condition(query_fields = [], cond_types = [], vals = []):
         """
-        cond_types 为 1 代表精确查询，为0代表模糊查询
+        cond_types 为 1 代表精确查询，为0代表模糊查询, 2代表小于号, 3代表大于号
         """
         sql = "SELECT * FROM  `" + tbname + "`"
         return _basic_query(sql + form_cond_str(query_fields, cond_types, vals))
