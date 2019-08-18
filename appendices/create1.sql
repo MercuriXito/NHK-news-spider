@@ -24,7 +24,7 @@ CREATE TABLE IF NOT EXISTS EasyPosts(
     postNewsId VARCHAR(40) UNIQUE NOT NULL, -- nhk网站上自带的posts的id，依次为主键
     postTitle VARCHAR(200) NOT NULL, -- title
     postPublishTime DATETIME NOT NULL, -- publishTime
-    postContent VARCHAR(2000), -- content
+    postContent VARCHAR(3000), -- content
     postType TINYINT NOT NULL, -- posts类型，预留给非easynews
     hasImg BOOLEAN DEFAULT 0 NOT NULL,
     hasAudio BOOLEAN DEFAULT 0 NOT NULL,
