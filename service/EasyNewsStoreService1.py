@@ -40,6 +40,10 @@ def store_one_news(news, dangomeans):
         )
         eid = epostQuery(["postNewsId"],[1],[news.news_id])
 
+    else:
+        print("News:{} already exists.".format(news.news_id))
+        return 
+
     eid = eid[0][0]
 
 
