@@ -1,18 +1,28 @@
 #!/usr/bin/bash
 
+# check error of crontab in /var/spool/mail/root
+
 # env variables
 localtime=`date +%Y-%m-%d`
 slocaltime=`date +%Y-%m-%d_%H:%M:%S`
-basepath='/root/Projects/nhkspider'
+# fill the base path of the project
+basepath='/root/Projects/NHK-news-spider' # for example
 logfile=${localtime}'_crawl.log'
 errorfile=${localtime}'_error.log'
 
 cd $basepath
-echo Crawling in ${slocaltime} >> ${basepath}/logs/${logfile}
-python3 start.py 1>> ${basepath}/logs/${logfile} 2>> ${basepath}/logs/${errorfile}
-echo >> ${basepath}/logs/${logfile}
+# create log
+has_log=`ls ${basepath} | grep -w log`
+if [ x$has_log == x ];then
+    mkdir log
+fi
 
-errors=`cat ${basepath}/logs/${errorfile}`
+# run
+echo Crawling in ${slocaltime} >> ${basepath}/log/${logfile}
+python3 start.py 1>> ${basepath}/log/${logfile} 2>> ${basepath}/log/${errorfile}
+echo >> ${basepath}/log/${logfile}
+
+errors=`cat ${basepath}/log/${errorfile}`
 if [ x${errors} = x ];then
-    rm -rf ${basepath}/logs/${errorfile}
+    rm -rf ${basepath}/log/${errorfile}
 fi
