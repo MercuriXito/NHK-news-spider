@@ -30,6 +30,9 @@ def _basic_query(sql):
 def _basic_execute(sql):
     """ 执行非查询sql的基本过程 """
     con = getConn()
+
+    # cancel auto commit
+    con.autocommit(False)
     try:
         with con.cursor() as cursor:
             cursor.execute(sql)
@@ -42,6 +45,7 @@ def _basic_execute(sql):
         print("Error:{}".format(ex))
         return False
 
+    con.autocommit(True)
     return True
 
 """

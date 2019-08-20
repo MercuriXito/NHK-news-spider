@@ -24,7 +24,7 @@ class Connection:
         self.conn = None
 
     def getConn(self):
-        if self.conn is None:
+        if self.conn is None or not self.conn.open:
             cons = pconfig()
             dbcon = cons.get_config()["database-config"]
             self.conn = pymysql.connect(
@@ -34,6 +34,9 @@ class Connection:
                 db=dbcon["dbname"], 
                 charset=dbcon["charset"]
                 )
+            
+            # set autocommit
+            self.conn.autocommit(True)
         return self.conn
 
     def closeConn(self):
