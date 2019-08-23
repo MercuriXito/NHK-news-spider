@@ -4,7 +4,7 @@ ul.bar-time-selector > li {display: block; float: left; height: 100%; width: 30%
 text-align: center;}
 ul.bar-time-selector > li > a{ text-decoration: none; 
 font-size: 1.2em; font-family: Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif; color: white;}
-ul.bar-time-selector > li > a:hover{color: white;}
+ul.bar-time-selector > li > a:hover{color: rgba(126, 119, 119, 0.904);}
 ul.bar-time-selector > li > a.checked{color: rgba(126, 119, 119, 0.904);}
 
 

@@ -18,6 +18,16 @@
             (4) 新闻的日期：时间的格式是"%Y-%m-%d"
         */
 
+        // loading 的显示和隐藏.
+        function display_loading(foo){
+            var loading_tag = $("<div class='loading'><img src='{{ url_for('static',filename='icons/loading.gif')}}'></div>");
+            foo.append(loading_tag);
+        }
+
+        function remove_loading(foo){
+            foo.children("div.loading").remove();
+        }
+
         // 用json对象构建news_block
         function form_news_block(data){
             $.each(data, function(){                
@@ -45,7 +55,30 @@
         }
 
         jQuery.support.cors = true;
+
+
         $(document).ready(function(){
+
+            // 移动设备访问调整margin
+            if(navigator.userAgent.match(/(iPhone|iPod|Android|ios)/i)){
+                $("div.wrapper").css("margin","0");
+            }
+
+            // ajax请求后台的数据
+            var main_tag = $("div.content");
+            display_loading(main_tag);
+            $.ajax({   
+                url: "/easynews/show/index",
+                type:"GET",
+                dataType: "json",
+                success:function(data){
+                    remove_loading(main_tag);
+                    form_news_block(data);   
+                },
+                error:function(){
+                    remove_loading(main_tag);
+                }
+            })
 
             // 列表栏切换添加响应事件
             $("div.topbar a").click(function(event){
@@ -68,36 +101,26 @@
                     return;
                 }
 
+                // clear 
+                $("div.content").empty();
+                display_loading($("div.content"));
                 $.ajax({
                     url: "easynews/show/index/" + this.innerText.toLowerCase(),
                     type: "GET",
                     dataType: "json",
                     success:function(data){
-                        $("div.content").empty();
+                        remove_loading($("div.content"));
                         form_news_block(data);
+                        // back to the top
+                        $("div.content").scrollTop(0);
                     },
                     error:function(){
+                        remove_loading($("div.content"));
                         console.log(url);
                     }
                 });
             });
             
-
-            // 移动设备访问调整margin
-            if(navigator.userAgent.match(/(iPhone|iPod|Android|ios)/i)){
-                $("div.wrapper").css("margin","0");
-            }
-
-            // ajax请求后台的数据
-            $.ajax({   
-                url: "/easynews/show/index",
-                type:"GET",
-                dataType: "json",
-                success:function(data){
-                    form_news_block(data);   
-                }
-            })
-
         })
 
     </script>

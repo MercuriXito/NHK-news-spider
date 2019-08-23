@@ -8,7 +8,10 @@
 
 '''
 
+import os,sys
 import json
+
+from entity.EasyNewsT import EasyNews
 
 from flask import Flask
 from flask import render_template,url_for
@@ -17,16 +20,25 @@ from service.EasyNewsRenderService import *
 
 app = Flask(__name__)
 
+def process_url(news):
+    # 处理图片和音频的路径
+    tmp = EasyNews()
+    img_save_relpath = tmp.img_base_path
+    audio_save_relpath = tmp.audio_base_path
+
+    news["img_url"] = img_save_relpath + news["news_img_name"]
+    if news["news_has_audio"]:
+        news["audio_url"] = audio_save_relpath + news["news_audio_name"]
+
+
 @app.route("/easynews/show/index")
 def render_index():
     print("get requests")
 
     # 返回之前将查询的数据进行修改，做路径拼接
     rj =  render_index_time_range_json("recent")
-    static_root_path  = "/static"
-    img_save_relpath = "/downloaded/easyNews/img"
     for news in rj:
-        news["img_url"] = static_root_path + img_save_relpath + "/" + news["news_img_name"] 
+        process_url(news)
 
     return json.dumps(rj)
 
@@ -37,10 +49,8 @@ def render_date_range_index(news_time_range):
 
     # 返回之前将查询的数据进行修改，做路径拼接
     rj =  render_index_time_range_json(news_time_range)
-    static_root_path  = "/static"
-    img_save_relpath = "/downloaded/easyNews/img"
     for news in rj:
-        news["img_url"] = static_root_path + img_save_relpath + "/" + news["news_img_name"] 
+        process_url(news)
 
     return json.dumps(rj)
 
@@ -56,9 +66,7 @@ def render_detailed_json(news_id):
         return json.dumps(news)
 
     # 1. 修改查询数据
-    static_root_path  = "/static"
-    img_save_relpath = "/downloaded/easyNews/img"
-    news["img_url"] = static_root_path + img_save_relpath + "/" + news["news_img_name"]
+    process_url(news)
 
     return json.dumps(news)
 

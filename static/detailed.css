@@ -60,3 +60,16 @@ div.icons-list ul > li > div.icon-wrapper > div.icon-img > img{
 div.icons-list ul > li > div.icon-wrapper > div.icon-img > img:hover{
     cursor: pointer;
 }
+
+/* 语音播放条 */
+div.audio-player {background-color: black; height: auto; width: 100%;
+position: absolute; bottom: 7%; z-index: 1; visibility: hidden;}
+div.audio-player > div.main-bar{height: 30px; width: 100%;}
+div.audio-player > div.main-bar > .audio-name{height: 100%; width: 80%; float: left; color: white;
+padding-left:5%; font-family: 'MS Mincho', SimSun, 'Times New Roman';}
+div.audio-player > div.main-bar > div.icon-cancel{height:100%; width: 30px; border-color: green;
+position: relative; float: right;}
+.audio-player > .main-bar > .icon-cancel > img{height:100%; position: relative; z-index: 2;}
+.audio-player > .main-bar > .icon-cancel > img:hover{cursor: pointer;}
+div.audio-player > audio{width: 100%; background-color: black;
+border-radius: 0;}

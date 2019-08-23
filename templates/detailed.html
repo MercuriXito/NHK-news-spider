@@ -11,6 +11,17 @@
      -->
     <script src="{{ url_for('static',filename='js/jquery-3.4.1.min.js') }}"></script>
     <script>
+
+        var loading_tag = $("<div class='loading'><img src='{{ url_for('static',filename='icons/loading.gif')}}'></div>");
+        // loading 的显示和隐藏.
+        function display_loading(foo){
+            foo.append(loading_tag);
+        }
+
+        function remove_loading(foo){
+            foo.children("div.loading").remove();
+        }
+
         // jquery
         $(document).ready(function(){
             // 移动设备访问调整margin
@@ -18,37 +29,25 @@
                 $("div.wrapper").css("margin","0");
             }
 
-            // icons 绑定事件 
-            $("img[name='return']").click(function(){
-                window.location="/";
-            });
-
-            $("img[name='display']").click(function(){
-                $("ruby > rt").toggle();
-            });
-
             // 请求详情页数据：
-            /*
-                图片：
-                标题：
-                详情内容：
-                单词：
-                    每个单词包含：
-                        单词：释义。
-            
-            */
-
-            var present_path = window.location.pathname.split("/")
-            var news_id = present_path[present_path.length - 1]
-            var json_path = "/easynews/show/detailedcontent/"
+            var present_path = window.location.pathname.split("/");
+            var news_id = present_path[present_path.length - 1];
+            var json_path = "/easynews/show/detailedcontent/";
+            // display loading 
+            $("div.detailed").hide();
+            $("div.interface").children("div.header").after(loading_tag);
             $.ajax({
                 url: json_path + news_id,
                 type: "GET",
                 dataType: "json",
                 success: function(data){
-
+                    
+                    // hide loading
+                    remove_loading($("div.interface"));
+                    $("div.detailed").show();
+                    
                     if(data["news_id"] === undefined){
-                        window.location.href = "/error/404"
+                        window.location.href = "/error/404";
                     }
                     console.log(data);
                     // 渲染图片
@@ -61,7 +60,7 @@
                     var cblock_content = $("div.detailed-content > div.dcontent-main");
                     var paragraphs = data["news_content"].split("\n");
                     $.each(paragraphs, function(){
-                        var $cblock_para = $("<p>" + this + "</p>")
+                        var $cblock_para = $("<p>" + this + "</p>");
                         cblock_content.append($cblock_para);
                     });
 
@@ -76,7 +75,39 @@
                         cblock_dict_dd.append($this_dict);
                     });
 
-                }
+                    // 渲染audio
+                    if (data["news_has_audio"]){
+                        $("span.audio-name").html(data["news_title"]+".mp4");
+                        $("audio").attr("src",data["audio_url"]);
+                    }else{
+                        // 如果没有音频注销audio图标的原有事件
+                        $("img[name='audio']").attr("onclick","");
+                        $("img[name='audio']").click(function(event){
+                            event.preventDefault();
+                            alert("Sorry, this audio does not contain audio.")
+                        });
+                    }
+                },
+                error:function(){
+                    remove_loading($("div.detailed"));
+                },
+            });
+
+            // icons 绑定事件 
+            $("img[name='return']").click(function(){
+                window.location="/";
+            });
+
+            $("img[name='display']").click(function(){
+                $("ruby > rt").toggle();
+            });
+
+            $("img[name='audio']").click(function(){
+                $("div.audio-player").css("visibility","visible");
+            });
+
+            $("div.icon-cancel > img").click(function(){
+                $("div.audio-player").css("visibility","hidden");
             });
 
         });
@@ -90,26 +121,36 @@
                 <div class="switch-lists"></div>
             </div>
             <div class="detailed">
-                    <div class="detailed-imgs">
-                        <img src="img/sakura.png"/>
+                <div class="detailed-imgs">
+                    <img src="img/sakura.png"/>
+                </div>
+                <div class="detailed-content">
+                    <div class="dcontent-title">
+                        <!-- 标题 -->
+                        ここはニュースのタイトルを書いてください．
                     </div>
-                    <div class="detailed-content">
-                        <div class="dcontent-title">
-                            <!-- 标题 -->
-                            ここはニュースのタイトルを書いてください．
-                        </div>
-                        <hr class="imgs-content" />
-                        <div class="dcontent-main">
-                        <!-- 正文 -->
-                        </div>
-                        <hr class="main-dictionary"/>
-                        <div class="dcontent-dict">
-                            <span class="name">「辞書」</span>
-                            <div class="dict-block">
-                                <!-- 单词和释义 -->
-                            </div>
+                    <hr class="imgs-content" />
+                    <div class="dcontent-main">
+                    <!-- 正文 -->
+                    </div>
+                    <hr class="main-dictionary"/>
+                    <div class="dcontent-dict">
+                        <span class="name">「辞書」</span>
+                        <div class="dict-block">
+                            <!-- 单词和释义 -->
                         </div>
                     </div>
+                </div>
+            </div>
+
+            <div class="audio-player">
+                <div class="main-bar">
+                    <span class="audio-name"></span>
+                    <div class="icon-cancel">
+                        <img src="{{ url_for('static',filename='icons/cancel.png') }}" alt="" width="100%"/>
+                    </div>
+                </div>
+                <audio src="" controls="controls"></audio>
             </div>
     
             <!-- icon图标排列 -->
@@ -132,7 +173,7 @@
                     <li class="icon">
                         <div class="icon-wrapper">
                             <div class="icon-img">
-                                <img src="{{ url_for('static',filename='icons/audio.png') }}" alt="" />
+                                <img name="audio" src="{{ url_for('static',filename='icons/audio.png') }}" alt="" />
                             </div>
                         </div>
                     </li>
