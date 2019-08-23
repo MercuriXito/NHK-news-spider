@@ -69,7 +69,9 @@ def render_detailed_content(news_id):
         news_date = news[3]
         news_content = news[4]
         news_has_img = news[6]
+        news_has_audio = news[7]
         news_img_name = news[8]
+        news_audio_name = news[9]
 
         if not news_has_img:
             news_img_name = "logo.png"
@@ -83,6 +85,8 @@ def render_detailed_content(news_id):
             "news_title": news_title,
             "news_content": news_content,
             "news_img_name": news_img_name,
+            "news_has_audio": news_has_audio,
+            "news_audio_name": news_audio_name,
         }
 
         mess["news_link_dangos"] = []
@@ -117,14 +121,14 @@ def render_index_time_range_json(time_range):
         frontday = today - timedelta(7)
         rslist = epquery(["postPublishTime"], [3], [time.strftime(time_format, frontday.timetuple())])
     elif time_range == "earlier":
-        startday = today - timedelta(15)
+        startday = today - timedelta(18)
         endday = today - timedelta(7)
         rslist = epquery(["postPublishTime","postPublishTime"],
             [2,3],
             [time.strftime(time_format, endday.timetuple()), time.strftime(time_format, startday.timetuple())])
     elif time_range == "old":
         startday = today - timedelta(30)
-        endday = today - timedelta(15)
+        endday = today - timedelta(18)
         rslist = epquery(["postPublishTime","postPublishTime"],
             [2,3],
             [time.strftime(time_format, endday.timetuple()), time.strftime(time_format, startday.timetuple())])
@@ -136,7 +140,9 @@ def render_index_time_range_json(time_range):
         news_title = rs[2]
         news_date = rs[3]
         news_has_img = rs[6]
+        news_has_audio = rs[7]
         news_img_name = rs[8]
+        news_audio_name = rs[9]
 
         if not news_has_img:
             news_img_name = "logo.png"
@@ -149,6 +155,8 @@ def render_index_time_range_json(time_range):
             "publish_date": time.strftime(date_format, news_date.timetuple()),
             "news_title": news_title,
             "news_img_name": news_img_name,
+            "news_has_audio": news_has_audio,
+            "news_audio_name": news_audio_name,
         })
 
     # 最后给message_dict排序，日期后的在前面
