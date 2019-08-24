@@ -17,13 +17,12 @@ from spider.spider_util import getRandomHeaders, mulithread_download
 
 def pad(text):
     while len(text) % 16 != 0:
-        text += b''
-    
+        text += b' '    
     return text
 
 def pad_key(key):
     while len(key) % 16 != 0:
-        key += b''
+        key += b' '
     return key
 
 
@@ -127,7 +126,7 @@ def retrieve_audio(news_id, base_audio_file_path, mp4_filename = ""):
     # grep and save keys
     key = requests.get(keys_param["URI"], headers=getRandomHeaders()).content
     # m3u8 use AES128 and CBC mode as default
-    aes = AES.new(pad_key(key), AES.MODE_CBC)
+    aes = AES.new(pad_key(key), AES.MODE_CBC, b"0000000000000000")
 
     uris = []
     filenames = []
@@ -164,6 +163,6 @@ def retrieve_audio(news_id, base_audio_file_path, mp4_filename = ""):
     print("Combined ts into {}".format(mp4_path))
 
     for ts_file_path in ts_file_paths:
-        os.system("del {}".format(ts_file_path))
+        os.remove(ts_file_path)
 
     pass

@@ -128,13 +128,25 @@ def download_files(url, basepath, name):
 # 
 def download_audio(news_id, basepath, name):
     try:
-
+        if not os.path.exists(basepath):
+            os.makedirs(basepath)
         if name not in os.listdir(basepath):
-            threading._start_new_thread(
-                retrieve_audio, news_id = news_id, 
-                base_audio_file_path = basepath, 
-                mp4_filename = name
-            )
+            
+            class audioThread(threading.Thread):
+                def __init__(self):
+                    threading.Thread.__init__(self)
+
+                def run(self):
+                    print("Begin downloading audio file.")
+                    retrieve_audio(
+                        news_id = news_id, 
+                        base_audio_file_path = basepath,
+                        mp4_filename= name)
+
+            athread = audioThread()
+            athread.start()
+        else:
+            print("Audio already exists.")
 
     except Exception as ex:
         pass
