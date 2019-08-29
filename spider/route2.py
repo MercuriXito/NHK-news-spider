@@ -169,15 +169,16 @@ def scrapeMain(url = main_url):
         news.news_id = mjson["news_id"]
         news.title = mjson["title"]
         news.publish_time = mjson["news_prearranged_time"]
-        news.has_img = mjson["has_news_web_image"]
-        news.has_audio = mjson["has_news_web_movie"]
+        news_has_img = mjson["has_news_web_image"]
+        new_has_easy_new_img = mjson["has_news_easy_image"]
+        news.has_audio = mjson["has_news_easy_voice"]
 
         # 获取时间
         time_tuple = time.strptime(news.publish_time, timeformat)
         date_str = time.strftime(dateformat, time_tuple)
 
-        # 下载图片
-        if news.has_img:
+        # 如果拥有的是普通的image
+        if news_has_img:
             basic_url = mjson["news_web_image_uri"]
             relpath = "/".join(basic_url.split("/")[-2:])
             img_ext = relpath.split(".")[-1]
@@ -186,10 +187,22 @@ def scrapeMain(url = main_url):
 
             # date + news_id 作为图片名字
             name = "{}_{}.{}".format(date_str, news.news_id, img_ext)
+            news.has_img = True
             news.img_name = name
 
             # 下载 
             download_files(img_url, news.img_base_path, name)
+
+        # 如果只有easyNews的image
+        if not news.has_img and new_has_easy_new_img:
+            image_name = mjson["news_easy_image_uri"]
+            # 爬取easynews的图片就从详情页里面爬取
+            basic_url = "https://www3.nhk.or.jp/news/easy/%s/%s" %(news.news_id, image_name)
+
+            name = "{}_{}.{}".format(date_str, news.news_id, image_name.split(".")[-1])
+            news.img_name = name
+            # 下载
+            download_files(basic_url, news.img_base_path, name)
 
         # 下载音频只需要提供easynews的news_id，保存路径和文件名
         if news.has_audio:

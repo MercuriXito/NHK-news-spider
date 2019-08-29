@@ -58,14 +58,16 @@ def scrapeHistory(url = side_news_json_url):
         for thatnews in news_list:
             news = EasyNews()
 
+
             news.news_id = thatnews["news_id"]
             news.title = thatnews["title"]
             news.publish_time = thatnews["news_prearranged_time"]
-            news.has_img = thatnews["has_news_web_image"]
-            news.has_audio = thatnews["has_news_web_movie"]
+            news_has_img = thatnews["has_news_web_image"]
+            new_has_easy_new_img = thatnews["has_news_easy_image"]
+            news.has_audio = thatnews["has_news_easy_voice"]
 
             # 下载图片
-            if news.has_img:
+            if news_has_img:
                 basic_url = thatnews["news_web_image_uri"]
                 relpath = "/".join(basic_url.split("/")[-2:])
                 img_ext = relpath.split(".")[-1]
@@ -76,10 +78,22 @@ def scrapeHistory(url = side_news_json_url):
                 time_tuple = time.strptime(news.publish_time, timeformat)
                 date_str = time.strftime(dateformat, time_tuple)
                 name = "{}_{}.{}".format(date_str, news.news_id, img_ext)
+                news.has_img = True
                 news.img_name = name
 
                 # 下载 
                 download_files(img_url, news.img_base_path, name)
+
+            # 如果只有easyNews的image
+            if not news.has_img and new_has_easy_new_img:
+                image_name = thatnews["news_easy_image_uri"]
+                # 爬取easynews的图片就从详情页里面爬取
+                basic_url = "https://www3.nhk.or.jp/news/easy/%s/%s" %(news.news_id, image_name)
+
+                name = "{}_{}.{}".format(date_str, news.news_id, image_name.split(".")[-1])
+                news.img_name = name
+                # 下载
+                download_files(basic_url, news.img_base_path, name)
 
             if news.has_audio:
                 name = "{}_{}.mp4".format(date_str, news.news_id)
