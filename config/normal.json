@@ -5,5 +5,9 @@
         "password":"taylor01",
         "host":"localhost",
         "charset":"utf8"
+    },
+    "project-config":{
+        "project_abspath":"/root/projects/NHK-news-spider",
+        "logdir":"log"
     }
 }
